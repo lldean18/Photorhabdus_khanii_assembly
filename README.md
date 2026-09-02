@@ -1,0 +1,1 @@
+# Photorhabdus_khanii_assembly
