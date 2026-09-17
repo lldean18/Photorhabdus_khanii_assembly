@@ -16,10 +16,10 @@ module load rclone-uon/1.65.2
 
 # copy the directory with rclone
 rclone --transfers 4 --checkers 4 --bwlimit 100M --onedrive-chunk-size 5M \
---checksum copy Laura:Other_peoples_data/Photorhabdus_khanii_short_read_data ~/data/bryant/Photorhabdus_short_reads
+--checksum copy Laura:Other_peoples_data/Photorhabdus_khanii_short_read_data ~/data/bryant/photorhabdus_assembly/Photorhabdus_short_reads
 
 # Check the directory has copied successfully
-rclone check --one-way Laura:Other_peoples_data/Photorhabdus_khanii_short_read_data ~/data/bryant/Photorhabdus_short_reads
+rclone check --one-way Laura:Other_peoples_data/Photorhabdus_khanii_short_read_data ~/data/bryant/photorhabdus_assembly/Photorhabdus_short_reads
 
 # unload module
 module unload rclone-uon/1.65.2
