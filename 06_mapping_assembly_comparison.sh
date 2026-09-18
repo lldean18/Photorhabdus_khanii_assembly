@@ -27,31 +27,31 @@ polished1=/gpfs01/home/mbzlld/data/bryant/photorhabdus_assembly/polypolish/32363
 reads1=/gpfs01/home/mbzlld/data/bryant/photorhabdus_assembly/Photorhabdus_short_reads/PKWT_EKDN250027778-1A_22W3MHLT4_L8_1.fq.gz
 reads2=/gpfs01/home/mbzlld/data/bryant/photorhabdus_assembly/Photorhabdus_short_reads/PKWT_EKDN250027778-1A_22W3MHLT4_L8_2.fq.gz
 
-# map short reads to the two assemblies
-bwa index $unpolished
-bwa mem -t 8 $unpolished $reads1 $reads2 | samtools sort -@ 8 -o unpolished.bam
-samtools index unpolished.bam
-
-bwa index $polished1
-bwa mem -t 8 $polished1 $reads1 $reads2 | samtools sort -@ 8 -o polished1.bam
-samtools index polished1.bam
-
-# generate mapping statistics
-samtools flagstat unpolished.bam > unpolished.flagstat.txt
-samtools flagstat polished1.bam > polished1.flagstat.txt
-
-
-# call SNPs against reads
-samtools faidx $unpolished
-samtools faidx $polished1
+# # map short reads to the two assemblies
+# bwa index $unpolished
+# bwa mem -t 8 $unpolished $reads1 $reads2 | samtools sort -@ 8 -o unpolished.bam
+# samtools index unpolished.bam
+# 
+# bwa index $polished1
+# bwa mem -t 8 $polished1 $reads1 $reads2 | samtools sort -@ 8 -o polished1.bam
+# samtools index polished1.bam
+# 
+# # generate mapping statistics
+# samtools flagstat unpolished.bam > unpolished.flagstat.txt
+# samtools flagstat polished1.bam > polished1.flagstat.txt
+# 
+# 
+# # call SNPs against reads
+# samtools faidx $unpolished
+# samtools faidx $polished1
 
 bcftools mpileup --threads 8 -f $unpolished -Ou unpolished.bam |
-bcftools call -mv --threads 8 -Oz -o unpolished_vs_reads.vcf.gz
+bcftools call --ploidy 1 -mv --threads 8 -Oz -o unpolished_vs_reads.vcf.gz
 bcftools filter --threads 8 -i 'QUAL>=30 && DP>=20' unpolished_vs_reads.vcf.gz -Oz -o unpolished_vs_reads.flt.vcf.gz
 bcftools index --threads 8 -t unpolished_vs_reads.flt.vcf.gz
 
 bcftools mpileup --threads 8 -f $polished1 -Ou polished1.bam |
-bcftools call -mv --threads 8 -Oz -o polished1_vs_reads.vcf.gz
+bcftools call --ploidy 1 -mv --threads 8 -Oz -o polished1_vs_reads.vcf.gz
 bcftools filter --threads 8 -i 'QUAL>=30 && DP>=20' polished1_vs_reads.vcf.gz -Oz -o polished1_vs_reads.flt.vcf.gz
 bcftools index --threads 8 -t polished1_vs_reads.flt.vcf.gz
 
