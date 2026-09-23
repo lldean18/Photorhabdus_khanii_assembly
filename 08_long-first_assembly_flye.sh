@@ -23,20 +23,20 @@ SHORT2=/gpfs01/home/mbzlld/data/bryant/photorhabdus_assembly/Photorhabdus_short_
 LONG=/gpfs01/home/mbzlld/data/bryant/11d3a3246d_20251024_Bryant1L/long_reads/323630L_Photorhabduskhanii.fastq.gz
 OUTDIR=/gpfs01/home/mbzlld/data/bryant/photorhabdus_assembly/flye_polished
 
-
-# perform initial genome assembly
-conda activate flye
-flye \
---nano-hq $LONG \
---out-dir $OUTDIR \
---threads 16 \
---genome-size 5m
-conda deactivate
-
-# align the short reads to the assembly
-bwa index $OUTDIR/assembly.fasta
-bwa mem -t 16 -a $OUTDIR/assembly.fasta $reads1 > $OUTDIR/alignments_1.sam
-bwa mem -t 16 -a $OUTDIR/assembly.fasta $reads2 > $OUTDIR/alignments_2.sam
+# hashing the bit that already completed
+##  # perform initial genome assembly
+##  conda activate flye
+##  flye \
+##  --nano-hq $LONG \
+##  --out-dir $OUTDIR \
+##  --threads 16 \
+##  --genome-size 5m
+##  conda deactivate
+##  
+##  # align the short reads to the assembly
+##  bwa index $OUTDIR/assembly.fasta
+bwa mem -t 16 -a $OUTDIR/assembly.fasta $SHORT1 > $OUTDIR/alignments_1.sam
+bwa mem -t 16 -a $OUTDIR/assembly.fasta $SHORT2 > $OUTDIR/alignments_2.sam
 
 # filter alignments
 conda activate polypolish
