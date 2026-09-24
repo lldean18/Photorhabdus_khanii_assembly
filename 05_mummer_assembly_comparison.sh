@@ -44,12 +44,17 @@ flye=/gpfs01/home/mbzlld/data/bryant/photorhabdus_assembly/flye_polished/assembl
 ##  show-snps -Clr $comparison.filtered.delta > $comparison.snps
 ##  mummerplot --png --layout -R $polished1 -Q $unicycler --filter --prefix $comparison $comparison.filtered.delta
 
-comparison=unicycler_vs_flye
-nucmer --prefix $comparison $unicycler $flye
+##  comparison=unicycler_vs_flye
+##  nucmer --prefix $comparison $unicycler $flye
+##  delta-filter -1 $comparison.delta > $comparison.filtered.delta
+##  show-snps -Clr $comparison.filtered.delta > $comparison.snps
+##  mummerplot --png --layout -R $unicycler -Q $flye --filter --prefix $comparison $comparison.filtered.delta
+
+comparison=pol1_vs_flye
+nucmer --prefix $comparison $polished1 $flye
 delta-filter -1 $comparison.delta > $comparison.filtered.delta
 show-snps -Clr $comparison.filtered.delta > $comparison.snps
-mummerplot --png --layout -R $unicycler -Q $flye --filter --prefix $comparison $comparison.filtered.delta
-
+mummerplot --png --layout -R $polished1 -Q $flye --filter --prefix $comparison $comparison.filtered.delta
 
 # cleanup env
 conda deactivate
