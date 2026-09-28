@@ -24,10 +24,13 @@ cd /gpfs01/home/mbzlld/data/bryant/photorhabdus_assembly/genome_comparisons
 python /gpfs01/home/mbzlld/software_bin/miniconda3/envs/quast/bin/quast \
 --threads 16 \
 --eukaryote \
--o quast \
+-o quast2 \
+-r /gpfs01/home/mbzlld/data/bryant/11d3a3246d_20251024_Bryant1L/assembly/323630L_Photorhabduskhanii.gff \
 /gpfs01/home/mbzlld/data/bryant/11d3a3246d_20251024_Bryant1L/assembly/323630L_Photorhabduskhanii.fna \
+/gpfs01/home/mbzlld/data/bryant/11d3a3246d_20251024_Bryant1L/assembly/323630L_Photorhabduskhanii.fasta \
 /gpfs01/home/mbzlld/data/bryant/photorhabdus_assembly/polypolish/323630L_Photorhabduskhanii_polished.fna \
-/gpfs01/home/mbzlld/data/bryant/photorhabdus_assembly/pypolca/pypolca_corrected.fasta
+/gpfs01/home/mbzlld/data/bryant/photorhabdus_assembly/unicycler_hybrid/assembly_rotated.fasta \
+/gpfs01/home/mbzlld/data/bryant/photorhabdus_assembly/flye_polished/assembly_polished_rotated.fasta
 
 # other options not used in this run
 #	-r $reference \
