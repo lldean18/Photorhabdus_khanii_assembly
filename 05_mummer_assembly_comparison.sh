@@ -24,7 +24,7 @@ polished1=/gpfs01/home/mbzlld/data/bryant/photorhabdus_assembly/polypolish/32363
 polished2=/gpfs01/home/mbzlld/data/bryant/photorhabdus_assembly/pypolca/pypolca_corrected.fasta
 unicycler=/gpfs01/home/mbzlld/data/bryant/photorhabdus_assembly/unicycler_hybrid/assembly_rotated.fasta
 flye=/gpfs01/home/mbzlld/data/bryant/photorhabdus_assembly/flye_polished/assembly_polished_rotated.fasta
-
+autocycler=/gpfs01/home/mbzlld/data/bryant/photorhabdus_assembly/autocycler/autocycler_out/consensus_assembly.fasta
 
 ##  # quantify differences between polished and unpolished assemblies
 ##  nucmer --prefix unpol_vs_pol1 $unpolished $polished1
@@ -36,25 +36,31 @@ flye=/gpfs01/home/mbzlld/data/bryant/photorhabdus_assembly/flye_polished/assembl
 ##  delta-filter -1 pol1_vs_pol2.delta > pol1_vs_pol2.filtered.delta
 ##  show-snps -Clr pol1_vs_pol2.filtered.delta > pol1_vs_pol2.snps
 ##  mummerplot --png --layout -R $polished1 -Q $polished2 --filter --prefix pol1_vs_pol2 pol1_vs_pol2.filtered.delta
+##  
+##  # look at the new assemblies
+##  comparison=pol1_vs_unicycler
+##  nucmer --prefix $comparison $polished1 $unicycler
+##  delta-filter -1 $comparison.delta > $comparison.filtered.delta
+##  show-snps -Clr $comparison.filtered.delta > $comparison.snps
+##  mummerplot --png --layout -R $polished1 -Q $unicycler --filter --prefix $comparison $comparison.filtered.delta
+##  
+##  comparison=unicycler_vs_flye
+##  nucmer --prefix $comparison $unicycler $flye
+##  delta-filter -1 $comparison.delta > $comparison.filtered.delta
+##  show-snps -Clr $comparison.filtered.delta > $comparison.snps
+##  mummerplot --png --layout -R $unicycler -Q $flye --filter --prefix $comparison $comparison.filtered.delta
+##  
+##  comparison=pol1_vs_flye
+##  nucmer --prefix $comparison $polished1 $flye
+##  delta-filter -1 $comparison.delta > $comparison.filtered.delta
+##  show-snps -Clr $comparison.filtered.delta > $comparison.snps
+##  mummerplot --png --layout -R $polished1 -Q $flye --filter --prefix $comparison $comparison.filtered.delta
 
-# look at the new assemblies
-comparison=pol1_vs_unicycler
-nucmer --prefix $comparison $polished1 $unicycler
+comparison=pol1_vs_autocycler
+nucmer --prefix $comparison $polished1 $autocycler
 delta-filter -1 $comparison.delta > $comparison.filtered.delta
 show-snps -Clr $comparison.filtered.delta > $comparison.snps
-mummerplot --png --layout -R $polished1 -Q $unicycler --filter --prefix $comparison $comparison.filtered.delta
-
-comparison=unicycler_vs_flye
-nucmer --prefix $comparison $unicycler $flye
-delta-filter -1 $comparison.delta > $comparison.filtered.delta
-show-snps -Clr $comparison.filtered.delta > $comparison.snps
-mummerplot --png --layout -R $unicycler -Q $flye --filter --prefix $comparison $comparison.filtered.delta
-
-comparison=pol1_vs_flye
-nucmer --prefix $comparison $polished1 $flye
-delta-filter -1 $comparison.delta > $comparison.filtered.delta
-show-snps -Clr $comparison.filtered.delta > $comparison.snps
-mummerplot --png --layout -R $polished1 -Q $flye --filter --prefix $comparison $comparison.filtered.delta
+mummerplot --png --layout -R $polished1 -Q $autocycler --filter --prefix $comparison $comparison.filtered.delta
 
 # cleanup env
 conda deactivate
