@@ -21,16 +21,37 @@ conda deactivate
 # load software
 #conda create --name ratt bioconda::ratt
 conda activate ratt
+
+# prep the input annotation embl files
 cd $(dirname $polished)
 mkdir temp
 cp /share/bryant_lab/reference_genomes/323630L_Photorhabduskhanii.embl temp/
+
+# split the embl annotation into one file per contig
+cd temp
+awk '
+BEGIN { n=0 }
+/^ID   / {
+    n++
+    file="contig_" n ".embl"
+}
+{
+    print > file
+}
+/^\/\/$/ {
+    close(file)
+}
+' 323630L_Photorhabduskhanii.embl
+
+# next make the separate fasta files
+
 
 # copy the annotation from the old assembly to the polished version
 ratt \
 --prefix $(basename ${polished%.*}) \
 --type Assembly \
 --refseq $assembly \
-temp $polished
+temp
 
 
 # list all the feature types that are present in the annotation (to be lifted over)
