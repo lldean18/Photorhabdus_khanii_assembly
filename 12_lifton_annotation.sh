@@ -6,52 +6,17 @@
 
 
 # setup env
+srun --partition defq --cpus-per-task 2 --mem 20g --time 08:00:00 --pty bash
 source $HOME/.bash_profile
 assembly=/gpfs01/home/mbzlld/data/bryant/11d3a3246d_20251024_Bryant1L/assembly/323630L_Photorhabduskhanii.fna
 annotation=/gpfs01/home/mbzlld/data/bryant/11d3a3246d_20251024_Bryant1L/assembly/323630L_Photorhabduskhanii.gff
 polished=/gpfs01/home/mbzlld/data/bryant/photorhabdus_assembly/polypolish/323630L_Photorhabduskhanii_polished.fna
 
 
-# index the polished assembly
-conda activate samtools1.24
-samtools faidx $polished
-conda deactivate
-
-
-# load software
-#conda create --name ratt bioconda::ratt
-conda activate ratt
-
-# prep the input annotation embl files
-cd $(dirname $polished)
-mkdir temp
-cp /share/bryant_lab/reference_genomes/323630L_Photorhabduskhanii.embl temp/
-
-# split the embl annotation into one file per contig
-cd temp
-awk '
-BEGIN { n=0 }
-/^ID   / {
-    n++
-    file="contig_" n ".embl"
-}
-{
-    print > file
-}
-/^\/\/$/ {
-    close(file)
-}
-' 323630L_Photorhabduskhanii.embl
-
-# next make the separate fasta files
-
-
-# copy the annotation from the old assembly to the polished version
-ratt \
---prefix $(basename ${polished%.*}) \
---type Assembly \
---refseq $assembly \
-temp
+##  # index the polished assembly
+##  conda activate samtools1.24
+##  samtools faidx $polished
+##  conda deactivate
 
 
 # list all the feature types that are present in the annotation (to be lifted over)
