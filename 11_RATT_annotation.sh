@@ -22,6 +22,8 @@ polished=/gpfs01/home/mbzlld/data/bryant/photorhabdus_assembly/polypolish/323630
 # load software
 #conda create --name ratt bioconda::ratt
 conda activate ratt
+#conda install --channel conda-forge --channel bioconda perl-bioperl
+#conda install bioconda::perl-yaml
 
 # prep the input annotation embl files
 cd $(dirname $polished)/annotation
@@ -76,40 +78,14 @@ cat 323630L_Photorhabduskhanii_polished.contig_1.final.embl \
 323630L_Photorhabduskhanii_polished.contig_2.final.embl > 323630L_Photorhabduskhanii_polished.embl
 
 
+# convert to gff format
+bp_genbank2gff3 \
+--format EMBL \
+--outdir ./ \
+323630L_Photorhabduskhanii_polished.embl
 
 
-
-# list all the feature types that are present in the annotation (to be lifted over)
-awk '!/^#/ {print $3}' $annotation | sort | uniq > $(dirname $polished)/feature_types.txt
-sed -i '/^[[:space:]]*$/d' $(dirname $polished)/feature_types.txt
-
-
-# add parent information
-conda activate gffread
-sed 's/^\([^\t]*\t\)\{6\}?/\1./' $annotation |
-awk 'BEGIN{FS="\t"; OFS=FS} {sub("?", ".", $7)}1' $annotation |
-gffread -O --keep-comments - > $(dirname $polished)/temp.gff
-conda deactivate
-
-gffread --keep-comments -T $annotation > $(dirname $polished)/temp.gtf
-
-
-# transfer the annotation to the polished assembly
-conda activate liftoff
-# fix liftoff
-#cp "$(python -c 'import liftoff,os; print(os.path.dirname(liftoff.__file__))')/polish.py" \
-#   "$(python -c 'import liftoff,os; print(os.path.dirname(liftoff.__file__))')/polish.py.orig"
-# then edited the function def group_cds_by_tran
-
-
-liftoff \
-    $polished \
-    $assembly \
-    -f $(dirname $polished)/feature_types.txt \
-    -infer_genes \
-    -g $(dirname $polished)/temp.gff \
-    -o ${polished%.*}.gff \
-    -p 4
+# cleanup env
 conda deactivate
 
 
